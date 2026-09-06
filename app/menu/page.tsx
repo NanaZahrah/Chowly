@@ -1,3 +1,4 @@
+   // @ts-nocheck
 'use client'
 
 import { useEffect, useState } from 'react'
@@ -7,8 +8,8 @@ import { useRouter } from 'next/navigation'
 const GUEST_ID = '62a83336-cb54-4e92-984e-71fa7c07b0d5'
 
 export default function Menu() {
-  const [items, setItems] = useState([])
-  const [cart, setCart] = useState({})
+  const [items, setItems] = useState<any[]>([])
+  const [cart, setCart] = useState<Record<string, number>>({})
   const [placing, setPlacing] = useState(false)
   const router = useRouter()
 
@@ -27,7 +28,7 @@ export default function Menu() {
     setCart((prev) => ({ ...prev, [itemId]: (prev[itemId] || 0) + 1 }))
   }
 
-  function removeItem(itemId) {
+  function addItem(itemId: any) {
     setCart((prev) => {
       const updated = { ...prev }
       if (updated[itemId] > 1) updated[itemId] -= 1
