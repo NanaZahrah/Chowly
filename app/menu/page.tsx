@@ -29,7 +29,7 @@ export default function Menu() {
     setCart((prev) => ({ ...prev, [itemId]: (prev[itemId] || 0) + 1 }))
   }
 
-  function addItem(itemId: any) {
+    function removeItem(itemId: any) {
     setCart((prev) => {
       const updated = { ...prev }
       if (updated[itemId] > 1) updated[itemId] -= 1
