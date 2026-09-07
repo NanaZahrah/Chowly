@@ -1,4 +1,4 @@
-   // @ts-nocheck
+// @ts-nocheck
 'use client'
 export const dynamic = 'force-dynamic'
 
@@ -10,7 +10,7 @@ export default function OrderConfirmation() {
   const { id } = useParams()
   const [order, setOrder] = useState(null)
   const [orderItems, setOrderItems] = useState([])
-    const [timeLeft, setTimeLeft] = useState(null)
+  const [timeLeft, setTimeLeft] = useState(null)
   const [guessResult, setGuessResult] = useState(null)
   const [revealedDish, setRevealedDish] = useState(null)
 
@@ -22,8 +22,7 @@ export default function OrderConfirmation() {
         .eq('orderid', id)
         .single()
       setOrder(orderData)
-            if (orderData) setTimeLeft(orderData.waitingtime * 60)
-    
+      if (orderData) setTimeLeft(orderData.waitingtime * 60)
 
       const { data: itemsData } = await supabase
         .from('orderitem')
@@ -33,7 +32,8 @@ export default function OrderConfirmation() {
     }
     loadOrder()
   }, [id])
-    useEffect(() => {
+
+  useEffect(() => {
     if (timeLeft === null || timeLeft <= 0) return
     const timer = setInterval(() => {
       setTimeLeft((t) => (t > 0 ? t - 1 : 0))
@@ -62,8 +62,8 @@ export default function OrderConfirmation() {
 
   if (!order) {
     return (
-      <main style={{ backgroundColor: '#1A1512', minHeight: '100vh', color: '#F2EDE4', padding: '80px 24px' }}>
-        <p>Loading order...</p>
+      <main style={{ backgroundColor: '#15130F', minHeight: '100vh', color: '#EDE8DE', padding: '64px 24px' }}>
+        <p style={{ color: '#8A8378' }}>Loading order...</p>
       </main>
     )
   }
@@ -71,82 +71,85 @@ export default function OrderConfirmation() {
   const total = orderItems.reduce((sum, oi) => sum + oi.unitprice * oi.quantity, 0)
 
   return (
-    <main style={{ backgroundColor: '#1A1512', minHeight: '100vh', color: '#F2EDE4', padding: '80px 24px' }}>
-      <div style={{ maxWidth: '640px', margin: '0 auto' }}>
-        <p style={{ color: '#E8590C', fontSize: '14px', marginBottom: '8px' }}>Order confirmed</p>
-        <h1 style={{ fontFamily: 'Georgia, serif', fontSize: '36px', marginBottom: '8px' }}>
+    <main style={{ backgroundColor: '#15130F', minHeight: '100vh', color: '#EDE8DE', padding: '64px 24px' }}>
+      <div style={{ maxWidth: '600px', margin: '0 auto' }}>
+        <p style={{ color: '#B8935F', fontSize: '12px', letterSpacing: '0.08em', marginBottom: '12px' }}>ORDER CONFIRMED</p>
+        <h1 style={{ fontFamily: 'Georgia, serif', fontWeight: 'normal', fontSize: '32px', marginBottom: '12px' }}>
           Order #{order.orderid.slice(0, 8)}
         </h1>
-        <p style={{ color: '#C9C0B2', marginBottom: '32px' }}>
-          Status: <strong style={{ color: '#F2EDE4' }}>{order.orderstatus}</strong> · Estimated wait: <strong style={{ color: '#F2EDE4' }}>{order.waitingtime} mins</strong>
+        <p style={{ color: '#8A8378', marginBottom: '36px', fontSize: '14px' }}>
+          Status: <strong style={{ color: '#EDE8DE' }}>{order.orderstatus}</strong> · Estimated wait: <strong style={{ color: '#EDE8DE' }}>{order.waitingtime} mins</strong>
         </p>
-                {order.orderstatus === 'PREPARING' && timeLeft > 0 && (
-          <div style={{ border: '1px solid #E8590C', borderRadius: '4px', padding: '20px', marginBottom: '32px', textAlign: 'center' }}>
-            <p style={{ color: '#6B7156', fontSize: '13px', marginBottom: '4px' }}>Time remaining</p>
-            <p style={{ fontFamily: 'Georgia, serif', fontSize: '40px', color: '#E8590C' }}>{formatTime(timeLeft)}</p>
+
+        {order.orderstatus === 'PREPARING' && timeLeft > 0 && (
+          <div style={{ border: '1px solid #2A2620', borderRadius: '2px', padding: '24px', marginBottom: '28px', textAlign: 'center' }}>
+            <p style={{ color: '#8A8378', fontSize: '12px', letterSpacing: '0.05em', marginBottom: '8px' }}>TIME REMAINING</p>
+            <p style={{ fontFamily: 'Georgia, serif', fontSize: '38px', color: '#B8935F', fontWeight: 'normal' }}>{formatTime(timeLeft)}</p>
           </div>
         )}
 
         {order.orderstatus === 'PREPARING' && (
-          <div style={{ border: '1px solid #3A332C', borderRadius: '4px', padding: '20px', marginBottom: '32px' }}>
-            <p style={{ marginBottom: '12px' }}>Bored waiting? Guess the dish category</p>
+          <div style={{ border: '1px solid #2A2620', borderRadius: '2px', padding: '24px', marginBottom: '28px' }}>
+            <p style={{ marginBottom: '16px', fontSize: '14px', color: '#8A8378' }}>Bored waiting? Guess the dish category</p>
             {!revealedDish ? (
               <button onClick={playGuessGame} style={{
-                color: '#F2EDE4', padding: '10px 20px', border: '1px solid #6B7156',
-                borderRadius: '4px', background: 'none', cursor: 'pointer'
+                color: '#EDE8DE', padding: '10px 20px', border: '1px solid #2A2620',
+                borderRadius: '2px', background: 'none', cursor: 'pointer', fontSize: '13px'
               }}>
                 Reveal a mystery dish
               </button>
             ) : (
               <div>
-                <p style={{ fontSize: '18px', marginBottom: '12px' }}>"{revealedDish.itemname}" — what category is it?</p>
+                <p style={{ fontSize: '16px', marginBottom: '16px' }}>"{revealedDish.itemname}" — what category is it?</p>
                 <div style={{ display: 'flex', gap: '8px', marginBottom: '12px' }}>
                   {['FOOD', 'DRINK', 'DESSERT'].map((cat) => (
                     <button key={cat} onClick={() => checkGuess(cat)} style={{
-                      padding: '8px 16px', border: '1px solid #6B7156', borderRadius: '4px',
-                      background: 'none', color: '#F2EDE4', cursor: 'pointer'
+                      padding: '8px 16px', border: '1px solid #2A2620', borderRadius: '2px',
+                      background: 'none', color: '#EDE8DE', cursor: 'pointer', fontSize: '13px'
                     }}>
                       {cat}
                     </button>
                   ))}
                 </div>
                 {guessResult && (
-                  <p style={{ color: guessResult === 'correct' ? '#6B7156' : '#E8590C' }}>
-                    {guessResult === 'correct' ? 'Correct! 🎉' : `Not quite — it's ${revealedDish.itemtype}`}
+                  <p style={{ color: guessResult === 'correct' ? '#B8935F' : '#8A8378', fontSize: '14px' }}>
+                    {guessResult === 'correct' ? 'Correct.' : `Not quite — it's ${revealedDish.itemtype}`}
                   </p>
                 )}
               </div>
             )}
           </div>
         )}
-                <div style={{ marginBottom: '32px' }}>
+
+        <div style={{ marginBottom: '28px' }}>
           {orderItems.map((oi) => (
             <div key={oi.orderitemid} style={{
               display: 'flex', justifyContent: 'space-between',
-              borderBottom: '1px solid #3A332C', padding: '12px 0'
+              borderBottom: '1px solid #2A2620', padding: '14px 0'
             }}>
-              <p>{oi.quantity} × {oi.menuitem?.itemname}</p>
-              <p style={{ color: '#E8590C' }}>₦{oi.unitprice * oi.quantity}</p>
+              <p style={{ fontSize: '15px' }}>{oi.quantity} × {oi.menuitem?.itemname}</p>
+              <p style={{ color: '#8A8378', fontSize: '15px' }}>₦{oi.unitprice * oi.quantity}</p>
             </div>
           ))}
         </div>
 
-        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '18px', marginBottom: '40px' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '17px', marginBottom: '36px' }}>
           <p>Total</p>
-          <p style={{ color: '#E8590C' }}>₦{total}</p>
+          <p style={{ color: '#B8935F' }}>₦{total}</p>
         </div>
-                <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
+
+        <div style={{ display: 'flex', gap: '14px', flexWrap: 'wrap' }}>
           <a href={`/order/${order.orderid}/complaint`} style={{
-            color: '#F2EDE4', padding: '12px 20px', border: '1px solid #6B7156',
-            textDecoration: 'none', borderRadius: '4px', fontSize: '14px'
+            color: '#EDE8DE', padding: '12px 22px', border: '1px solid #2A2620',
+            textDecoration: 'none', borderRadius: '2px', fontSize: '13px', letterSpacing: '0.02em'
           }}>
-            File a Complaint
+            FILE A COMPLAINT
           </a>
           <a href={`/order/${order.orderid}/pay`} style={{
-            backgroundColor: '#E8590C', color: '#1A1512', padding: '12px 20px',
-            textDecoration: 'none', borderRadius: '4px', fontSize: '14px', fontWeight: 'bold'
+            backgroundColor: '#B8935F', color: '#15130F', padding: '12px 22px',
+            textDecoration: 'none', borderRadius: '2px', fontSize: '13px', fontWeight: 'bold', letterSpacing: '0.02em'
           }}>
-            Pay Now
+            PAY NOW
           </a>
         </div>
       </div>

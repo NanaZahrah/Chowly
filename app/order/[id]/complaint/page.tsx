@@ -1,4 +1,4 @@
-   // @ts-nocheck
+// @ts-nocheck
 'use client'
 export const dynamic = 'force-dynamic'
 
@@ -16,7 +16,8 @@ export default function Complaint() {
   const [comment, setComment] = useState('')
   const [submitting, setSubmitting] = useState(false)
   const [done, setDone] = useState(false)
-    async function handleSubmit() {
+
+  async function handleSubmit() {
     setSubmitting(true)
 
     if (reason.trim()) {
@@ -40,18 +41,19 @@ export default function Complaint() {
     setSubmitting(false)
     setDone(true)
   }
-    if (done) {
+
+  if (done) {
     return (
-      <main style={{ backgroundColor: '#1A1512', minHeight: '100vh', color: '#F2EDE4', padding: '80px 24px' }}>
-        <div style={{ maxWidth: '640px', margin: '0 auto' }}>
-          <h1 style={{ fontFamily: 'Georgia, serif', fontSize: '32px', marginBottom: '16px' }}>
+      <main style={{ backgroundColor: '#15130F', minHeight: '100vh', color: '#EDE8DE', padding: '64px 24px' }}>
+        <div style={{ maxWidth: '600px', margin: '0 auto' }}>
+          <h1 style={{ fontFamily: 'Georgia, serif', fontWeight: 'normal', fontSize: '30px', marginBottom: '16px' }}>
             Thank you
           </h1>
-          <p style={{ color: '#C9C0B2', marginBottom: '32px' }}>
+          <p style={{ color: '#8A8378', marginBottom: '28px', fontSize: '14px' }}>
             Your feedback has been recorded against order #{id.slice(0, 8)}.
           </p>
           <a href={`/order/${id}`} style={{
-            color: '#E8590C', textDecoration: 'none'
+            color: '#B8935F', textDecoration: 'none', fontSize: '13px'
           }}>
             ← Back to order
           </a>
@@ -59,39 +61,41 @@ export default function Complaint() {
       </main>
     )
   }
-    return (
-    <main style={{ backgroundColor: '#1A1512', minHeight: '100vh', color: '#F2EDE4', padding: '80px 24px' }}>
-      <div style={{ maxWidth: '640px', margin: '0 auto' }}>
-        <h1 style={{ fontFamily: 'Georgia, serif', fontSize: '36px', marginBottom: '8px' }}>
+
+  return (
+    <main style={{ backgroundColor: '#15130F', minHeight: '100vh', color: '#EDE8DE', padding: '64px 24px' }}>
+      <div style={{ maxWidth: '600px', margin: '0 auto' }}>
+        <h1 style={{ fontFamily: 'Georgia, serif', fontWeight: 'normal', fontSize: '32px', marginBottom: '8px' }}>
           Complaint & Rating
         </h1>
-        <p style={{ color: '#C9C0B2', marginBottom: '32px' }}>
+        <p style={{ color: '#8A8378', marginBottom: '36px', fontSize: '14px' }}>
           Order #{id.slice(0, 8)}
         </p>
 
-        <p style={{ marginBottom: '8px' }}>What went wrong?</p>
+        <p style={{ marginBottom: '10px', fontSize: '14px', color: '#8A8378' }}>What went wrong?</p>
         <textarea
           value={reason}
           onChange={(e) => setReason(e.target.value)}
           placeholder="e.g. Serious delay in preparation"
           style={{
-            width: '100%', padding: '12px', backgroundColor: '#1A1512',
-            color: '#F2EDE4', border: '1px solid #6B7156', borderRadius: '4px',
-            minHeight: '80px', marginBottom: '24px'
+            width: '100%', padding: '14px', backgroundColor: '#15130F',
+            color: '#EDE8DE', border: '1px solid #2A2620', borderRadius: '2px',
+            minHeight: '80px', marginBottom: '28px', fontSize: '14px'
           }}
         />
-                <p style={{ marginBottom: '8px' }}>Rate your experience</p>
-        <div style={{ display: 'flex', gap: '8px', marginBottom: '24px' }}>
+
+        <p style={{ marginBottom: '10px', fontSize: '14px', color: '#8A8378' }}>Rate your experience</p>
+        <div style={{ display: 'flex', gap: '8px', marginBottom: '28px' }}>
           {[1, 2, 3, 4, 5].map((num) => (
             <button
               key={num}
               onClick={() => setRatingScore(num)}
               style={{
-                width: '44px', height: '44px', borderRadius: '4px',
-                border: ratingScore === num ? '1px solid #E8590C' : '1px solid #6B7156',
-                backgroundColor: ratingScore === num ? '#E8590C' : 'none',
-                color: ratingScore === num ? '#1A1512' : '#F2EDE4',
-                cursor: 'pointer', fontSize: '16px'
+                width: '42px', height: '42px', borderRadius: '2px',
+                border: ratingScore === num ? '1px solid #B8935F' : '1px solid #2A2620',
+                backgroundColor: ratingScore === num ? '#B8935F' : 'none',
+                color: ratingScore === num ? '#15130F' : '#EDE8DE',
+                cursor: 'pointer', fontSize: '14px'
               }}
             >
               {num}
@@ -99,23 +103,24 @@ export default function Complaint() {
           ))}
         </div>
 
-        <p style={{ marginBottom: '8px' }}>Comment (optional)</p>
+        <p style={{ marginBottom: '10px', fontSize: '14px', color: '#8A8378' }}>Comment (optional)</p>
         <textarea
           value={comment}
           onChange={(e) => setComment(e.target.value)}
           placeholder="Tell us more..."
           style={{
-            width: '100%', padding: '12px', backgroundColor: '#1A1512',
-            color: '#F2EDE4', border: '1px solid #6B7156', borderRadius: '4px',
-            minHeight: '60px', marginBottom: '32px'
+            width: '100%', padding: '14px', backgroundColor: '#15130F',
+            color: '#EDE8DE', border: '1px solid #2A2620', borderRadius: '2px',
+            minHeight: '60px', marginBottom: '36px', fontSize: '14px'
           }}
         />
-                <button onClick={handleSubmit} disabled={submitting} style={{
-          backgroundColor: '#E8590C', color: '#1A1512', padding: '14px 28px',
-          border: 'none', borderRadius: '4px', fontWeight: 'bold',
-          fontSize: '16px', cursor: 'pointer'
+
+        <button onClick={handleSubmit} disabled={submitting} style={{
+          backgroundColor: '#B8935F', color: '#15130F', padding: '14px 30px',
+          border: 'none', borderRadius: '2px', fontWeight: 'bold',
+          fontSize: '13px', letterSpacing: '0.03em', cursor: 'pointer'
         }}>
-          {submitting ? 'Submitting...' : 'Submit'}
+          {submitting ? 'SUBMITTING...' : 'SUBMIT'}
         </button>
       </div>
     </main>

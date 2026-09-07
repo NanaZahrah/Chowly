@@ -14,7 +14,8 @@ export default function Pay() {
   const [amount, setAmount] = useState('')
   const [paying, setPaying] = useState(false)
   const [paid, setPaid] = useState(false)
-    async function handlePay() {
+
+  async function handlePay() {
     setPaying(true)
 
     await supabase.from('payment').insert({
@@ -31,54 +32,56 @@ export default function Pay() {
     setPaying(false)
     setPaid(true)
   }
-    if (paid) {
+
+  if (paid) {
     return (
-      <main style={{ backgroundColor: '#1A1512', minHeight: '100vh', color: '#F2EDE4', padding: '80px 24px' }}>
-        <div style={{ maxWidth: '640px', margin: '0 auto' }}>
-          <h1 style={{ fontFamily: 'Georgia, serif', fontSize: '32px', marginBottom: '16px' }}>
+      <main style={{ backgroundColor: '#15130F', minHeight: '100vh', color: '#EDE8DE', padding: '64px 24px' }}>
+        <div style={{ maxWidth: '600px', margin: '0 auto' }}>
+          <h1 style={{ fontFamily: 'Georgia, serif', fontWeight: 'normal', fontSize: '30px', marginBottom: '16px' }}>
             Payment successful
           </h1>
-          <p style={{ color: '#C9C0B2', marginBottom: '8px' }}>
+          <p style={{ color: '#8A8378', marginBottom: '8px', fontSize: '14px' }}>
             ₦{amount} paid via {method} for order #{id.slice(0, 8)}.
           </p>
-          <p style={{ color: '#6B7156', fontSize: '13px', marginBottom: '32px' }}>
+          <p style={{ color: '#8A8378', fontSize: '12px', marginBottom: '28px', opacity: 0.7 }}>
             This is a simulated payment — no real money was charged.
           </p>
-          <a href="/menu" style={{ color: '#E8590C', textDecoration: 'none' }}>
+          <a href="/menu" style={{ color: '#B8935F', textDecoration: 'none', fontSize: '13px' }}>
             ← Back to menu
           </a>
         </div>
       </main>
     )
   }
-    return (
-    <main style={{ backgroundColor: '#1A1512', minHeight: '100vh', color: '#F2EDE4', padding: '80px 24px' }}>
-      <div style={{ maxWidth: '640px', margin: '0 auto' }}>
-        <p style={{ color: '#E8590C', fontSize: '13px', marginBottom: '8px' }}>
-          PRETEND PAYMENT — no real charge
+
+  return (
+    <main style={{ backgroundColor: '#15130F', minHeight: '100vh', color: '#EDE8DE', padding: '64px 24px' }}>
+      <div style={{ maxWidth: '600px', margin: '0 auto' }}>
+        <p style={{ color: '#B8935F', fontSize: '12px', letterSpacing: '0.05em', marginBottom: '10px' }}>
+          PRETEND PAYMENT — NO REAL CHARGE
         </p>
-        <h1 style={{ fontFamily: 'Georgia, serif', fontSize: '36px', marginBottom: '32px' }}>
+        <h1 style={{ fontFamily: 'Georgia, serif', fontWeight: 'normal', fontSize: '32px', marginBottom: '36px' }}>
           Pay for Order #{id.slice(0, 8)}
         </h1>
 
-        <p style={{ marginBottom: '8px' }}>Amount (₦)</p>
+        <p style={{ marginBottom: '10px', fontSize: '14px', color: '#8A8378' }}>Amount (₦)</p>
         <input
           type="number"
           value={amount}
           onChange={(e) => setAmount(e.target.value)}
           placeholder="Enter amount"
           style={{
-            width: '100%', padding: '12px', backgroundColor: '#1A1512',
-            color: '#F2EDE4', border: '1px solid #6B7156', borderRadius: '4px',
-            marginBottom: '24px'
+            width: '100%', padding: '14px', backgroundColor: '#15130F',
+            color: '#EDE8DE', border: '1px solid #2A2620', borderRadius: '2px',
+            marginBottom: '28px', fontSize: '14px'
           }}
         />
 
-        <p style={{ marginBottom: '8px' }}>Payment method</p>
+        <p style={{ marginBottom: '10px', fontSize: '14px', color: '#8A8378' }}>Payment method</p>
         <select value={method} onChange={(e) => setMethod(e.target.value)} style={{
-          width: '100%', padding: '12px', backgroundColor: '#1A1512',
-          color: '#F2EDE4', border: '1px solid #6B7156', borderRadius: '4px',
-                    marginBottom: '32px'
+          width: '100%', padding: '14px', backgroundColor: '#15130F',
+          color: '#EDE8DE', border: '1px solid #2A2620', borderRadius: '2px',
+          marginBottom: '36px', fontSize: '14px'
         }}>
           <option value="CARD">Card</option>
           <option value="CASH">Cash</option>
@@ -86,11 +89,11 @@ export default function Pay() {
         </select>
 
         <button onClick={handlePay} disabled={paying || !amount} style={{
-          backgroundColor: '#E8590C', color: '#1A1512', padding: '14px 28px',
-          border: 'none', borderRadius: '4px', fontWeight: 'bold',
-          fontSize: '16px', cursor: 'pointer', width: '100%'
+          backgroundColor: '#B8935F', color: '#15130F', padding: '15px 28px',
+          border: 'none', borderRadius: '2px', fontWeight: 'bold',
+          fontSize: '13px', letterSpacing: '0.03em', cursor: 'pointer', width: '100%'
         }}>
-          {paying ? 'Processing (pretend)...' : 'Confirm Pretend Payment'}
+          {paying ? 'PROCESSING (PRETEND)...' : 'CONFIRM PRETEND PAYMENT'}
         </button>
       </div>
     </main>

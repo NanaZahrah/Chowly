@@ -12,6 +12,7 @@ export default function Menu() {
   const [items, setItems] = useState<any[]>([])
   const [cart, setCart] = useState<Record<string, number>>({})
   const [placing, setPlacing] = useState(false)
+  const [activeCategory, setActiveCategory] = useState('ALL')
   const router = useRouter()
 
   useEffect(() => {
@@ -23,7 +24,7 @@ export default function Menu() {
     loadMenu()
   }, [])
 
-  const categories = ['FOOD', 'DRINK', 'DESSERT']
+  const categories = ['ALL', 'FOOD', 'DRINK', 'DESSERT']
 
   function addItem(itemId: any) {
     setCart((prev) => ({ ...prev, [itemId]: (prev[itemId] || 0) + 1 }))
@@ -89,51 +90,102 @@ export default function Menu() {
     router.push(`/order/${order.orderid}`)
   }
 
+  const visibleItems = activeCategory === 'ALL'
+    ? items
+    : items.filter((item) => item.itemtype === activeCategory)
+
   return (
-    <main style={{ backgroundColor: '#15130F', minHeight: '100vh', color: '#EDE8DE', padding: '64px 24px 160px' }}>
-      <div style={{ maxWidth: '600px', margin: '0 auto' }}>
-        <h1 style={{ fontFamily: 'Georgia, serif', fontWeight: 'normal', fontSize: '36px', marginBottom: '48px' }}>
+    <main style={{ backgroundColor: '#15130F', minHeight: '100vh', color: '#EDE8DE', padding: '48px 24px 160px' }}>
+      <div style={{ maxWidth: '680px', margin: '0 auto' }}>
+        <h1 style={{ fontFamily: 'Georgia, serif', fontWeight: 'normal', fontSize: '34px', marginBottom: '28px' }}>
           Menu
         </h1>
 
+        <div style={{
+          display: 'flex', gap: '10px', marginBottom: '32px',
+          overflowX: 'auto', paddingBottom: '4px'
+        }}>
+          {categories.map((cat) => (
+            <button
+              key={cat}
+              onClick={() => setActiveCategory(cat)}
+              style={{
+                padding: '8px 18px', borderRadius: '20px', whiteSpace: 'nowrap',
+                border: activeCategory === cat ? '1px solid #B8935F' : '1px solid #2A2620',
+                backgroundColor: activeCategory === cat ? '#B8935F' : 'transparent',
+                color: activeCategory === cat ? '#15130F' : '#8A8378',
+                fontSize: '13px', letterSpacing: '0.03em', cursor: 'pointer'
+              }}
+            >
+              {cat === 'ALL' ? 'All' : cat === 'FOOD' ? 'Food' : cat === 'DRINK' ? 'Drinks' : 'Dessert'}
+            </button>
+          ))}
+        </div>
+
         {items.length === 0 && <p style={{ color: '#8A8378' }}>Loading menu...</p>}
 
-        {categories.map((cat) => (
-          <div key={cat} style={{ marginBottom: '44px' }}>
-            <p style={{ color: '#B8935F', fontSize: '12px', letterSpacing: '0.1em', marginBottom: '16px' }}>
-              {cat === 'FOOD' ? 'FOOD' : cat === 'DRINK' ? 'DRINKS' : 'DESSERT'}
-            </p>
-            {items.filter((item) => item.itemtype === cat).map((item) => (
-              <div key={item.menuitemid} style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                borderBottom: '1px solid #2A2620',
-                padding: '16px 0'
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(2, 1fr)',
+          gap: '16px'
+        }}>
+          {visibleItems.map((item) => (
+            <div key={item.menuitemid} style={{
+              border: '1px solid #2A2620',
+              borderRadius: '10px',
+              overflow: 'hidden',
+              backgroundColor: '#1B1812',
+              position: 'relative'
+            }}>
+              <div style={{
+                position: 'relative', width: '100%', aspectRatio: '1 / 1',
+                backgroundColor: '#242018', display: 'flex', alignItems: 'center', justifyContent: 'center'
               }}>
-                <div>
-                  <p style={{ fontSize: '16px', marginBottom: '4px' }}>{item.itemname}</p>
-                  <p style={{ fontSize: '14px', color: '#8A8378' }}>₦{item.priceofitem}</p>
+                <span style={{ fontSize: '48px', opacity: 0.5 }}>
+                  {item.itemtype === 'FOOD' ? '🍽' : item.itemtype === 'DRINK' ? '🥤' : '🍰'}
+                </span>
+                <div style={{
+                  position: 'absolute', top: '8px', right: '8px',
+                  width: '28px', height: '28px', borderRadius: '50%',
+                  backgroundColor: 'rgba(21,19,15,0.7)',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  fontSize: '14px', color: '#EDE8DE'
+                }}>
+                  ♡
                 </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+                <button
+                  onClick={() => addItem(item.menuitemid)}
+                  style={{
+                    position: 'absolute', bottom: '-16px', right: '12px',
+                    width: '34px', height: '34px', borderRadius: '50%',
+                    backgroundColor: '#B8935F', color: '#15130F',
+                    border: '3px solid #15130F', fontSize: '18px', fontWeight: 'bold',
+                    cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center'
+                  }}
+                >
+                  +
+                </button>
+              </div>
+
+              <div style={{ padding: '20px 12px 12px' }}>
+                <p style={{ fontSize: '14px', marginBottom: '4px', lineHeight: '1.3' }}>{item.itemname}</p>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <p style={{ fontSize: '14px', color: '#B8935F' }}>₦{item.priceofitem}</p>
                   {cart[item.menuitemid] > 0 && (
-                    <>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                       <button onClick={() => removeItem(item.menuitemid)} style={{
-                        width: '26px', height: '26px', borderRadius: '2px',
-                        border: '1px solid #2A2620', color: '#EDE8DE', background: 'none', cursor: 'pointer', fontSize: '14px'
+                        width: '20px', height: '20px', borderRadius: '50%',
+                        border: '1px solid #2A2620', color: '#EDE8DE', background: 'none',
+                        cursor: 'pointer', fontSize: '12px', lineHeight: 1
                       }}>−</button>
-                      <span style={{ fontSize: '14px', minWidth: '12px', textAlign: 'center' }}>{cart[item.menuitemid]}</span>
-                    </>
+                      <span style={{ fontSize: '12px' }}>{cart[item.menuitemid]}</span>
+                    </div>
                   )}
-                  <button onClick={() => addItem(item.menuitemid)} style={{
-                    width: '26px', height: '26px', borderRadius: '2px',
-                    border: '1px solid #B8935F', color: '#B8935F', background: 'none', cursor: 'pointer', fontSize: '14px'
-                  }}>+</button>
                 </div>
               </div>
-            ))}
-          </div>
-        ))}
+            </div>
+          ))}
+        </div>
       </div>
 
       {cartCount > 0 && (
@@ -143,7 +195,7 @@ export default function Menu() {
           display: 'flex', justifyContent: 'center'
         }}>
           <button onClick={placeOrder} disabled={placing} style={{
-            maxWidth: '600px', width: '100%',
+            maxWidth: '680px', width: '100%',
             backgroundColor: '#B8935F', color: '#15130F',
             padding: '15px', border: 'none', borderRadius: '2px',
             fontSize: '14px', letterSpacing: '0.03em', fontWeight: 'bold', cursor: 'pointer'
